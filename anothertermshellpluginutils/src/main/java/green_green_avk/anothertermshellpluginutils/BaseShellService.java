@@ -1,5 +1,6 @@
 package green_green_avk.anothertermshellpluginutils;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -74,6 +75,7 @@ public abstract class BaseShellService extends Service {
             this.sigFd = sigFd;
         }
 
+        @Override
         public boolean verify(@NonNull final Set<String> trusted) {
             return Auth.verify(ctx, Binder.getCallingUid(), trusted);
         }
@@ -103,6 +105,7 @@ public abstract class BaseShellService extends Service {
     }
 
     private final class ShellBinder extends Binder {
+        @SuppressLint("Recycle") // Correct
         @Override
         protected boolean onTransact(final int code,
                                      @NonNull final Parcel data, @Nullable Parcel reply,
@@ -147,14 +150,16 @@ public abstract class BaseShellService extends Service {
                         reply.writeNoException();
                         reply.writeInt(ret);
                     } finally {
-                        if (statFd != null) { // Async mode
-                            final OutputStream statOutput =
-                                    new FileOutputStream(statFd.getFileDescriptor());
-                            try {
-                                statOutput.write(reply.marshall());
-                            } catch (final IOException ignored) {
+                        if (statFd != null) {
+                            if (reply != null) { // Async mode
+                                final OutputStream statOutput =
+                                        new FileOutputStream(statFd.getFileDescriptor());
+                                try {
+                                    statOutput.write(reply.marshall());
+                                } catch (final IOException ignored) {
+                                }
+                                reply.recycle();
                             }
-                            reply.recycle();
                             Utils.closeNoError(statFd);
                         }
                         if (sigFd != null) Utils.closeNoError(sigFd);

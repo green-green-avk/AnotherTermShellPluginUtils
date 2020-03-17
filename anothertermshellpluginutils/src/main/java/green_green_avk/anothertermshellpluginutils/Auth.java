@@ -1,5 +1,6 @@
 package green_green_avk.anothertermshellpluginutils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,7 +18,7 @@ public final class Auth {
         return s.toCharsString();
     }
 
-    public static boolean verify(@NonNull final Context context, @NonNull final int uid,
+    public static boolean verify(@NonNull final Context context, final int uid,
                                  @NonNull final Set<String> trusted) {
         final PackageManager pm = context.getPackageManager();
         final String[] pkgs = pm.getPackagesForUid(uid);
@@ -25,6 +26,7 @@ public final class Auth {
         return verify(context, pkgs[0], trusted);
     }
 
+    @SuppressLint("PackageManagerGetSignatures") // So, check'em all...
     public static boolean verify(@NonNull final Context context, @NonNull final String pkgName,
                                  @NonNull final Set<String> trusted) {
         final PackageManager pm = context.getPackageManager();
