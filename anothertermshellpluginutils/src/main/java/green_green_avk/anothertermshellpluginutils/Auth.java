@@ -22,8 +22,10 @@ public final class Auth {
                                  @NonNull final Set<String> trusted) {
         final PackageManager pm = context.getPackageManager();
         final String[] pkgs = pm.getPackagesForUid(uid);
-        if (pkgs == null || pkgs.length != 1) return false; // suspicious...
-        return verify(context, pkgs[0], trusted);
+        if (pkgs == null || pkgs.length <= 0) return false;
+        for (final String pkg : pkgs)
+            if (!verify(context, pkg, trusted)) return false;
+        return true;
     }
 
     @SuppressLint("PackageManagerGetSignatures") // So, check'em all...
@@ -36,11 +38,9 @@ public final class Auth {
         } catch (final PackageManager.NameNotFoundException e) {
             return false;
         }
-        for (final Signature s : info.signatures) {
-            if (!trusted.contains(getFingerprint(s) + ":" + pkgName)) {
-                return false;
-            }
-        }
+        if (info.signatures == null || info.signatures.length <= 0) return false;
+        for (final Signature s : info.signatures)
+            if (!trusted.contains(getFingerprint(s) + ":" + pkgName)) return false;
         return true;
     }
 }
