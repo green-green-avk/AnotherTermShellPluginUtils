@@ -10,14 +10,31 @@ import androidx.annotation.NonNull;
 
 import java.util.Set;
 
+/**
+ * Common package authorization functions.
+ */
 public final class Auth {
     private Auth() {
     }
 
+    /**
+     * Returns some kind of unique string associated with a signature.
+     * Actually returns just the result of {@link Signature#toCharsString()}.
+     */
     public static String getFingerprint(@NonNull final Signature s) {
         return s.toCharsString();
     }
 
+    /**
+     * A package signatures verification by UID.
+     * If more than one package have the same UID,
+     * all of them must pass.
+     *
+     * @param context Some context.
+     * @param uid     A package UID.
+     * @param trusted A set to verify against.
+     * @return {@link true} if passed.
+     */
     public static boolean verify(@NonNull final Context context, final int uid,
                                  @NonNull final Set<String> trusted) {
         final PackageManager pm = context.getPackageManager();
@@ -28,6 +45,14 @@ public final class Auth {
         return true;
     }
 
+    /**
+     * A package signatures verification by name.
+     *
+     * @param context Some context.
+     * @param pkgName A package name.
+     * @param trusted A set to verify against.
+     * @return {@link true} if passed.
+     */
     @SuppressLint("PackageManagerGetSignatures") // So, check'em all...
     public static boolean verify(@NonNull final Context context, @NonNull final String pkgName,
                                  @NonNull final Set<String> trusted) {

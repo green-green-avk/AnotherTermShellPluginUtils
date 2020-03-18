@@ -26,7 +26,14 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+/**
+ * The caller side plugin communication class.
+ */
 public final class Plugin {
+
+    /**
+     * The default time out for communication operations.
+     */
     public static int timeout = 3000;
 
     private static final Set<WeakReference<Plugin>> stalled =
@@ -34,7 +41,7 @@ public final class Plugin {
 
     /**
      * Alas, we can't simply kill a plugin service thread,
-     * so just track broken or malicious ones...
+     * call it to track the broken or malicious ones...
      */
     public static boolean isStalled(@NonNull final String pkgName) {
         for (final WeakReference<Plugin> r : stalled) {
@@ -45,6 +52,14 @@ public final class Plugin {
         return false;
     }
 
+    /**
+     * Returns a plugin service component name by package name,
+     * effectively checking if an application is a plugin.
+     *
+     * @param ctx     Some context.
+     * @param pkgName Package name.
+     * @return Plugin service component name or null if not a plugin.
+     */
     @Nullable
     public static ComponentName getComponent(@NonNull final Context ctx,
                                              @NonNull final String pkgName) {
@@ -59,6 +74,15 @@ public final class Plugin {
         return cm;
     }
 
+    /**
+     * Creates a plugin communication instance.
+     * Must be finalized by {@link #unbind()}.
+     *
+     * @param ctx        Some context.
+     * @param pluginComp A plugin component name.
+     * @return The plugin communication instance.
+     * @throws IOException
+     */
     @NonNull
     public static Plugin bind(@NonNull Context ctx,
                               @NonNull final ComponentName pluginComp)
@@ -84,6 +108,9 @@ public final class Plugin {
     @NonNull
     private final ComponentName componentName;
 
+    /**
+     * @return The plugin's package name.
+     */
     @NonNull
     public String getPackageName() {
         return componentName.getPackageName();
@@ -147,10 +174,19 @@ public final class Plugin {
         return binder;
     }
 
+    /**
+     * Finally unbinds.
+     */
     public void unbind() {
         ctx.unbindService(conn);
     }
 
+    /**
+     * Sends a signal to the callee.
+     *
+     * @param signal A signal number.
+     *               {@link Protocol#SIG_FINALIZE} is supposed to be used to request return ASAP.
+     */
     public void signal(final int signal) {
         final DataOutputStream output =
                 new DataOutputStream(new FileOutputStream(sigFd.getFileDescriptor()));
@@ -256,6 +292,18 @@ public final class Plugin {
 
     private WeakReference<Plugin> execToken = null;
 
+    /**
+     * Execute a plugin.
+     * <p class="note">Note: in the current implementation,
+     * it's impossible to forcefully cancel this method:
+     * there is a chance that a plugin will block it forever
+     * and never close passed descriptors on its side.</p>
+     *
+     * @param args Arguments, supposedly from a shell.
+     * @param fds  Usually {stdin, stdout, stderr}.
+     * @return Exit status, supposedly for a shell.
+     * @throws IOException If plugin fails.
+     */
     public int exec(@NonNull final byte[][] args, @NonNull final FileDescriptor[] fds)
             throws IOException {
         final IBinder binder;
