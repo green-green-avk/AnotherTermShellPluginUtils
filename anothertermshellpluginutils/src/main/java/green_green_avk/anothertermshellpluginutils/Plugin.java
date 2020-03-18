@@ -92,6 +92,8 @@ public final class Plugin {
     private int protocol = 0;
 
     public static final class Meta {
+        private Meta() {
+        }
         // Empty yet
     }
 
@@ -133,7 +135,7 @@ public final class Plugin {
     private final ShellSrvConn conn = new ShellSrvConn();
 
     @NonNull
-    public IBinder getBinder() throws InterruptedException, IOException {
+    private IBinder getBinder() throws InterruptedException, IOException {
         IBinder binder;
         synchronized (lock) {
             if ((binder = this.binder) == null) {

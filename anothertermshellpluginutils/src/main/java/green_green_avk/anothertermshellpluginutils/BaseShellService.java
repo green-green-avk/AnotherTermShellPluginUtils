@@ -8,7 +8,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
-import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -86,9 +85,9 @@ public abstract class BaseShellService extends Service {
         }
 
         @Override
-        public int peekSignal() throws IOException {
+        public int readSignalNoBlock() throws IOException {
             final InputStream s = new FileInputStream(sigFd.getFileDescriptor());
-            if (s.available() < 4) return Protocol.SIG_NONE;
+            if (s.available() < Integer.BYTES) return Protocol.SIG_NONE;
             return readSignal(s);
         }
 
@@ -109,7 +108,7 @@ public abstract class BaseShellService extends Service {
         @Override
         protected boolean onTransact(final int code,
                                      @NonNull final Parcel data, @Nullable Parcel reply,
-                                     final int flags) throws RemoteException {
+                                     final int flags) {
             switch (code) {
                 case Protocol.CODE_PROTO: {
                     if (reply == null) return false;
