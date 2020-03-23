@@ -33,7 +33,7 @@ public final class Auth {
      * @param context Some context.
      * @param uid     A package UID.
      * @param trusted A set to verify against.
-     * @return {@link true} if passed.
+     * @return <code>true</code> if passed.
      */
     public static boolean verify(@NonNull final Context context, final int uid,
                                  @NonNull final Set<String> trusted) {
@@ -51,7 +51,7 @@ public final class Auth {
      * @param context Some context.
      * @param pkgName A package name.
      * @param trusted A set to verify against.
-     * @return {@link true} if passed.
+     * @return <code>true</code> if passed.
      */
     @SuppressLint("PackageManagerGetSignatures") // So, check'em all...
     public static boolean verify(@NonNull final Context context, @NonNull final String pkgName,

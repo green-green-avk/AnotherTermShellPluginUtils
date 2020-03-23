@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -119,9 +120,15 @@ public final class Plugin {
     private int protocol = 0;
 
     public static final class Meta {
-        private Meta() {
+        /**
+         * Info from plugin
+         */
+        @NonNull
+        public final Bundle data;
+
+        private Meta(@Nullable final Bundle data) {
+            this.data = data == null ? Bundle.EMPTY : data;
         }
-        // Empty yet
     }
 
     private Meta meta = null;
@@ -260,8 +267,12 @@ public final class Plugin {
         }
     }
 
+    /**
+     * @return The plugin metadata.
+     * @throws IOException
+     */
     @NonNull
-    private Meta getMeta() throws IOException {
+    public Meta getMeta() throws IOException {
         if (meta != null) return meta;
         final IBinder binder;
         try {
@@ -281,8 +292,7 @@ public final class Plugin {
             }
             if (!r)
                 throw new IOException("Transaction format error");
-            // Empty yet
-            return meta = new Meta();
+            return new Meta(reply.readBundle());
         } finally {
             endTimedBlock(token);
             data.recycle();

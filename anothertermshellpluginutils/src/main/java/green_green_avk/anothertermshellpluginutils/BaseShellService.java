@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
@@ -28,7 +29,7 @@ public abstract class BaseShellService extends Service {
 
     /**
      * Basic signatures to check a caller against.
-     * Format: <em></>&lt;signature&gt;:&lt;package_name&gt;</em>
+     * Format: <em>&lt;signature&gt;:&lt;package_name&gt;</em>
      * The signature is as created by {@link Auth#getFingerprint}.
      */
     public static final Set<String> trustedClients = new HashSet<>();
@@ -124,8 +125,9 @@ public abstract class BaseShellService extends Service {
                     return true;
                 }
                 case Protocol.CODE_META: {
-                    return reply != null;
-                    // Empty yet
+                    if (reply == null) return false;
+                    reply.writeBundle(onMeta());
+                    return true;
                 }
                 case Protocol.CODE_EXEC: {
                     final int ret;
@@ -194,4 +196,14 @@ public abstract class BaseShellService extends Service {
      */
     protected abstract int onExec(@NonNull ExecutionContext execCtx,
                                   @NonNull byte[][] args, @NonNull ParcelFileDescriptor[] fds);
+
+    /**
+     * To be overridden.
+     *
+     * @return The plugin metadata.
+     */
+    @Nullable
+    protected Bundle onMeta() {
+        return null;
+    }
 }
