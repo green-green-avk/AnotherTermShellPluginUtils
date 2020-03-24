@@ -32,11 +32,11 @@ public final class Protocol {
     /**
      * Info page resource Id
      */
-    public static final String META_KEY_HELP_RES_ID = "infoResId";
+    public static final String META_KEY_INFO_RES_ID = "infoResId";
     /**
      * Info page resource type
      */
-    public static final String META_KEY_HELP_RES_TYPE = "infoResType";
+    public static final String META_KEY_INFO_RES_TYPE = "infoResType";
 
     static final int CODE_PROTO = IBinder.FIRST_CALL_TRANSACTION;
     static final int CODE_META = IBinder.FIRST_CALL_TRANSACTION + 1;

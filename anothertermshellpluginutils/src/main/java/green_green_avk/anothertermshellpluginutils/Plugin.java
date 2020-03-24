@@ -66,14 +66,14 @@ public final class Plugin {
     public static ComponentName getComponent(@NonNull final Context ctx,
                                              @NonNull final String pkgName) {
         final PackageManager pm = ctx.getPackageManager();
-        final ComponentName cm = new ComponentName(pkgName, pkgName + ".ShellService");
+        final ComponentName cn = new ComponentName(pkgName, pkgName + ".ShellService");
         try {
-            final ServiceInfo si = pm.getServiceInfo(cm, 0);
+            final ServiceInfo si = pm.getServiceInfo(cn, 0);
             if (!si.enabled || !si.exported) return null;
         } catch (final PackageManager.NameNotFoundException e) {
             return null;
         }
-        return cm;
+        return cn;
     }
 
     /**

@@ -71,7 +71,7 @@ public abstract class BaseShellService extends Service {
         return fds;
     }
 
-    public static final class ExecutionContextImpl implements ExecutionContext {
+    private static final class ExecutionContextImpl implements ExecutionContext {
         @NonNull
         private final Context ctx;
         @NonNull
