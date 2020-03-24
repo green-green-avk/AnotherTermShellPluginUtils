@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -121,12 +122,18 @@ public final class Plugin {
 
     public static final class Meta {
         /**
-         * Info from plugin
+         * Plugin name
+         */
+        @NonNull
+        public final ComponentName componentName;
+        /**
+         * Plugin metadata
          */
         @NonNull
         public final Bundle data;
 
-        private Meta(@Nullable final Bundle data) {
+        private Meta(@NonNull final ComponentName componentName, @Nullable final Bundle data) {
+            this.componentName = componentName;
             this.data = data == null ? Bundle.EMPTY : data;
         }
     }
@@ -138,6 +145,11 @@ public final class Plugin {
         this.ctx = context;
         this.componentName = cn;
         this.sigFd = sigFd;
+    }
+
+    @NonNull
+    public Context getContext() {
+        return ctx;
     }
 
     private final Object lock = new Object();
@@ -292,12 +304,39 @@ public final class Plugin {
             }
             if (!r)
                 throw new IOException("Transaction format error");
-            return new Meta(reply.readBundle());
+            return new Meta(componentName, reply.readBundle());
         } finally {
             endTimedBlock(token);
             data.recycle();
             reply.recycle();
         }
+    }
+
+    /**
+     * A helper function for getting typed strings from the plugin metadata.
+     *
+     * @param resIdKey Resource Id field key.
+     * @param typeKey  Type field key.
+     * @return
+     * @throws IOException
+     */
+    @Nullable
+    public StringContent getMetaStringContent(@NonNull final String resIdKey,
+                                              @NonNull final String typeKey) throws IOException {
+        final Bundle metadata = getMeta().data;
+        final int resId = metadata.getInt(resIdKey, 0);
+        if (resId == 0) {
+            return null;
+        }
+        final PackageManager pm = ctx.getPackageManager();
+        final String content;
+        try {
+            content = pm.getResourcesForApplication(getPackageName()).getString(resId);
+        } catch (final PackageManager.NameNotFoundException | Resources.NotFoundException e) {
+            return null;
+        }
+        return new StringContent(content, metadata.getInt(typeKey,
+                Protocol.STRING_CONTENT_TYPE_PLAIN));
     }
 
     private WeakReference<Plugin> execToken = null;

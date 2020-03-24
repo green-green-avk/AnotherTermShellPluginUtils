@@ -21,7 +21,7 @@ public final class Protocol {
      */
     public static final int STRING_CONTENT_TYPE_HTML = 1;
     /**
-     * HTML as of {@link androidx.core.text.HtmlCompat}
+     * HTML as of <em>androidx.core.text.HtmlCompat</em>
      */
     public static final int STRING_CONTENT_TYPE_HTML_COMPAT_ANDROID = 2;
     /**

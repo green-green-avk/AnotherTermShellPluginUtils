@@ -18,7 +18,7 @@ public final class Auth {
     }
 
     /**
-     * Returns some kind of unique string associated with a signature.
+     * Returns an unique string associated with a signature.
      * Actually returns just the result of {@link Signature#toCharsString()}.
      */
     public static String getFingerprint(@NonNull final Signature s) {
