@@ -92,7 +92,7 @@ public final class Plugin {
         final ParcelFileDescriptor[] sigFd = ParcelFileDescriptor.createPipe();
         final Intent intent = new Intent().setComponent(pluginComp);
         ctx = ctx.getApplicationContext();
-        final Plugin plugin = new Plugin(ctx, pluginComp, sigFd[0]);
+        final Plugin plugin = new Plugin(ctx, pluginComp, sigFd[0], sigFd[1]);
         final boolean isBound;
         try {
             isBound = ctx.bindService(intent, plugin.conn, Context.BIND_AUTO_CREATE);
@@ -141,9 +141,11 @@ public final class Plugin {
     private Meta meta = null;
 
     private Plugin(@NonNull final Context context, @NonNull final ComponentName cn,
+                   @NonNull final ParcelFileDescriptor sigFdRem,
                    @NonNull final ParcelFileDescriptor sigFd) {
         this.ctx = context;
         this.componentName = cn;
+        this.sigFdRem = sigFdRem;
         this.sigFd = sigFd;
     }
 
@@ -158,6 +160,8 @@ public final class Plugin {
     private final Context ctx;
     @Nullable
     private volatile IBinder binder = null;
+    @NonNull
+    private final ParcelFileDescriptor sigFdRem;
     @NonNull
     private final ParcelFileDescriptor sigFd;
 
@@ -216,7 +220,6 @@ public final class Plugin {
         } catch (final IOException ignored) {
         }
         if (signal == Protocol.SIG_FINALIZE) {
-//            Utils.closeNoError(sigFd);
             execToken = beginTimedBlock();
         }
     }
@@ -369,7 +372,7 @@ public final class Plugin {
         try {
             writeByteArrayArray(data, args);
             writeFileDescriptorArray(data, fds);
-            data.writeFileDescriptor(sigFd.getFileDescriptor());
+            data.writeFileDescriptor(sigFdRem.getFileDescriptor());
             final boolean r;
             try {
                 r = binder.transact(Protocol.CODE_EXEC, data, reply, 0);
