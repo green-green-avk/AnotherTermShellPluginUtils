@@ -197,6 +197,7 @@ public final class Plugin {
      * Finally unbinds.
      */
     public void unbind() {
+        Utils.closeNoError(sigFd);
         ctx.unbindService(conn);
     }
 
@@ -211,9 +212,11 @@ public final class Plugin {
                 new DataOutputStream(new FileOutputStream(sigFd.getFileDescriptor()));
         try {
             output.writeInt(signal);
+            output.flush();
         } catch (final IOException ignored) {
         }
         if (signal == Protocol.SIG_FINALIZE) {
+//            Utils.closeNoError(sigFd);
             execToken = beginTimedBlock();
         }
     }
