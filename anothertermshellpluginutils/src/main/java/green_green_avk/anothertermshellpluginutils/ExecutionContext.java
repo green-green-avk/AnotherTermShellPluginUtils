@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public interface ExecutionContext {
 
     /**
@@ -15,7 +16,7 @@ public interface ExecutionContext {
      * @see BaseShellService#trustedClients
      * @see BaseShellService#trustedClientsDebug
      */
-    boolean verify(@NonNull final Set<String> trusted);
+    boolean verify(@NonNull Set<String> trusted);
 
     /**
      * @return A signal from the caller or {@link Protocol#SIG_NONE} if there is no signal.

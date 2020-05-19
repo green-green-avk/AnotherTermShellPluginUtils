@@ -2,6 +2,7 @@ package green_green_avk.anothertermshellpluginutils;
 
 import android.os.IBinder;
 
+@SuppressWarnings("unused")
 public final class Protocol {
     private Protocol() {
     }

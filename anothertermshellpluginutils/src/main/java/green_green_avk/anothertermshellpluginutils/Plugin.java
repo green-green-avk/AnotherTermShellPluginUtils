@@ -1,5 +1,6 @@
 package green_green_avk.anothertermshellpluginutils;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import java.util.WeakHashMap;
 /**
  * The caller side plugin communication class.
  */
+@SuppressWarnings("unused")
 public final class Plugin {
 
     /**
@@ -60,7 +62,7 @@ public final class Plugin {
      *
      * @param ctx     Some context.
      * @param pkgName Package name.
-     * @return Plugin service component name or null if not a plugin.
+     * @return Plugin service component name or <b>null</b> if not a plugin.
      */
     @Nullable
     public static ComponentName getComponent(@NonNull final Context ctx,
@@ -226,7 +228,7 @@ public final class Plugin {
 
     private final Handler hTimeout = new Handler(Looper.getMainLooper(), new Handler.Callback() {
         @Override
-        public boolean handleMessage(final Message msg) {
+        public boolean handleMessage(@NonNull final Message msg) {
             stalled.add((WeakReference<Plugin>) msg.obj);
             return true;
         }
@@ -289,6 +291,7 @@ public final class Plugin {
      * @return The plugin metadata.
      * @throws IOException
      */
+    @SuppressLint("ParcelClassLoader")
     @NonNull
     public Meta getMeta() throws IOException {
         if (meta != null) return meta;

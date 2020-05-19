@@ -12,6 +12,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("WeakerAccess,unused")
 public final class Utils {
     private Utils() {
     }
