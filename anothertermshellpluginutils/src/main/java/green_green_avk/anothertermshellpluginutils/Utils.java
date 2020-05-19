@@ -50,4 +50,29 @@ public final class Utils {
         } catch (final IOException ignored) {
         }
     }
+
+    /**
+     * Binds a {@link Waiter} to receive signal notifications.
+     *
+     * @param ec     - notifications source.
+     * @param waiter - a {@link Waiter} to bind.
+     */
+    public static void bindSignal(@NonNull final ExecutionContext ec,
+                                  @NonNull final Waiter<Object> waiter) {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        waiter.set(new Signal(ec.readSignal()));
+                    } catch (final IOException e) {
+                        waiter.set(new Signal(Protocol.SIG_FINALIZE));
+                        return; // When a client disconnects and closes the signal pipe
+                    }
+                }
+            }
+        };
+        t.setDaemon(true);
+        t.start();
+    }
 }
