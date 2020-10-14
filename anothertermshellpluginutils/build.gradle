@@ -4,11 +4,11 @@ group = 'com.github.green-green-avk'
 version = '1.9-dev'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 10
         versionName "1.9-dev"
     }
