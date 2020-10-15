@@ -310,7 +310,8 @@ public final class Plugin {
             }
             if (!r)
                 throw new IOException("Transaction format error");
-            return new Meta(componentName, reply.readBundle());
+            meta = new Meta(componentName, reply.readBundle());
+            return meta;
         } finally {
             endTimedBlock(token);
             data.recycle();
