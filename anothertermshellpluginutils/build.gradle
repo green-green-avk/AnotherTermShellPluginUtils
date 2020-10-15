@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.green-green-avk'
-version = '1.9-dev'
+version = '1.9'
 
 android {
     compileSdkVersion 29
@@ -10,7 +10,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 10
-        versionName "1.9-dev"
+        versionName version
     }
 
     buildTypes {
