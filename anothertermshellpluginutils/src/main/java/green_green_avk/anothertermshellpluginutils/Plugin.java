@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.content.res.Resources;
@@ -68,14 +69,17 @@ public final class Plugin {
     public static ComponentName getComponent(@NonNull final Context ctx,
                                              @NonNull final String pkgName) {
         final PackageManager pm = ctx.getPackageManager();
-        final ComponentName cn = new ComponentName(pkgName, pkgName + ".ShellService");
+        final PackageInfo pi;
         try {
-            final ServiceInfo si = pm.getServiceInfo(cn, 0);
-            if (!si.enabled || !si.exported) return null;
+            pi = pm.getPackageInfo(pkgName, PackageManager.GET_SERVICES);
         } catch (final PackageManager.NameNotFoundException e) {
             return null;
         }
-        return cn;
+        if (pi.services != null)
+            for (final ServiceInfo si : pi.services)
+                if (si.name.endsWith(".ShellService") && si.enabled && si.exported)
+                    return new ComponentName(pkgName, si.name);
+        return null;
     }
 
     /**

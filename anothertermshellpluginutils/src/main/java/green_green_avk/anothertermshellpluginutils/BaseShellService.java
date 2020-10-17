@@ -24,6 +24,7 @@ import java.util.Set;
 
 /**
  * The callee side plugin class.
+ * To be inherited and exported as {@code green_green_avk.anothertermshellplugin.ShellService}.
  */
 public abstract class BaseShellService extends Service {
 
