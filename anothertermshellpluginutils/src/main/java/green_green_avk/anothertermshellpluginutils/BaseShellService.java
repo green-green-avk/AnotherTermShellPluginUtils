@@ -97,13 +97,28 @@ public abstract class BaseShellService extends Service {
         @Override
         public int readSignalNoBlock() throws IOException {
             final InputStream s = new FileInputStream(sigFd.getFileDescriptor());
-            if (s.available() < Integer.BYTES) return Protocol.SIG_NONE;
-            return readSignal(s);
+            try {
+                if (s.available() < Integer.BYTES) return Protocol.SIG_NONE;
+                return readSignal(s);
+            } finally {
+                try {
+                    s.close();
+                } catch (final Throwable ignored) {
+                }
+            }
         }
 
         @Override
         public int readSignal() throws IOException {
-            return readSignal(new FileInputStream(sigFd.getFileDescriptor()));
+            final InputStream s = new FileInputStream(sigFd.getFileDescriptor());
+            try {
+                return readSignal(s);
+            } finally {
+                try {
+                    s.close();
+                } catch (final Throwable ignored) {
+                }
+            }
         }
     }
 
@@ -167,6 +182,11 @@ public abstract class BaseShellService extends Service {
                                 try {
                                     statOutput.write(reply.marshall());
                                 } catch (final IOException ignored) {
+                                } finally {
+                                    try {
+                                        statOutput.close();
+                                    } catch (final Throwable ignored) {
+                                    }
                                 }
                                 reply.recycle();
                             }

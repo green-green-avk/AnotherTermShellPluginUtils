@@ -21,7 +21,7 @@ public abstract class BaseMain {
      * to exit with a specified exit code and write a message (if not <b>null</b>)
      * to the <b>stderr</b>.
      */
-    protected static final class ExitException extends Error {
+    public static final class ExitException extends Error {
         private final int exitCode;
 
         public ExitException(final int exitCode, @Nullable final String message) {
@@ -54,7 +54,7 @@ public abstract class BaseMain {
     /**
      * Finishes the plugin immediately.
      */
-    protected void exit(final int exitCode) {
+    public static void exit(final int exitCode) {
         throw new ExitException(exitCode, (String) null);
     }
 
@@ -86,6 +86,11 @@ public abstract class BaseMain {
                     stderr.write(Utils.toUTF8(msg + "\n"));
                 } catch (final IOException ioException) {
                     throw new RuntimeException(ioException);
+                } finally {
+                    try {
+                        stderr.close();
+                    } catch (final Throwable ignored) {
+                    }
                 }
             }
             return e.getExitCode();
