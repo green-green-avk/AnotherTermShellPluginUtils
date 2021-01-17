@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.green-green-avk'
-version = '1.11'
+version = '1.12'
 
 android {
     compileSdkVersion 29
@@ -9,7 +9,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 12
+        versionCode 13
         versionName version
     }
 
