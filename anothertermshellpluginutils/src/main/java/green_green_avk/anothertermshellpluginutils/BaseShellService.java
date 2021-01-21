@@ -122,8 +122,8 @@ public abstract class BaseShellService extends Service {
         }
     }
 
-    @Nullable
     @Override
+    @Nullable
     public IBinder onBind(final Intent intent) {
         return new ShellBinder();
     }

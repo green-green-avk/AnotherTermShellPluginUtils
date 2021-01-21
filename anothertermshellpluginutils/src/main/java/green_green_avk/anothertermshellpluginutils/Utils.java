@@ -1,6 +1,8 @@
 package green_green_avk.anothertermshellpluginutils;
 
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 
 import androidx.annotation.NonNull;
@@ -54,9 +56,11 @@ public final class Utils {
     /**
      * Binds a {@link Waiter} to receive signal notifications.
      *
-     * @param ec     - notifications source.
+     * @param ec     - a notifications source.
      * @param waiter - a {@link Waiter} to bind.
+     * @deprecated
      */
+    @Deprecated
     public static void bindSignal(@NonNull final ExecutionContext ec,
                                   @NonNull final Waiter<Object> waiter) {
         final Thread t = new Thread() {
@@ -68,6 +72,42 @@ public final class Utils {
                     } catch (final IOException e) {
                         waiter.set(new Signal(Protocol.SIG_FINALIZE));
                         return; // When a client disconnects and closes the signal pipe
+                    }
+                }
+            }
+        };
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     * Binds an {@link OnSignal} to receive signal notifications.
+     *
+     * @param ec       - a notifications source.
+     * @param onSignal - an {@link OnSignal} listener to bind.
+     * @param looper   - where to execute the listener.
+     */
+    public static void bindSignal(@NonNull final ExecutionContext ec,
+                                  @NonNull final OnSignal onSignal,
+                                  @NonNull final Looper looper) {
+        final Handler h = new Handler(looper);
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    Signal signal = new Signal(Protocol.SIG_FINALIZE);
+                    try {
+                        signal = new Signal(ec.readSignal());
+                    } catch (final IOException e) {
+                        return; // When a client disconnects and closes the signal pipe
+                    } finally {
+                        final Signal _signal = signal;
+                        h.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onSignal.onSignal(_signal);
+                            }
+                        });
                     }
                 }
             }
