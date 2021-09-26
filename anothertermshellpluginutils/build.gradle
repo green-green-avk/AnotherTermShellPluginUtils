@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.github.green-green-avk'
-version = '1.14'
+version = '1.15'
 
 android {
     compileSdkVersion 30
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 15
+        versionCode 16
         versionName version
     }
 }
