@@ -12,7 +12,7 @@ public interface ExecutionContext {
      * Verify a caller against a specified set of <em>signature / package name</em> pairs.
      *
      * @param trusted Set to check against.
-     * @return <code>true</code> if identity matches.
+     * @return {@code true} if identity matches.
      * @see BaseShellService#trustedClients
      * @see BaseShellService#trustedClientsDebug
      */

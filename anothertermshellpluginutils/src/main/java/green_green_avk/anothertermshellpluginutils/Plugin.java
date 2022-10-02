@@ -42,7 +42,7 @@ public final class Plugin {
     public static int timeout = 3000;
 
     private static final Set<WeakReference<Plugin>> stalled =
-            Collections.newSetFromMap(new WeakHashMap<WeakReference<Plugin>, Boolean>());
+            Collections.newSetFromMap(new WeakHashMap<>());
 
     /**
      * Alas, we can't simply kill a plugin service thread,

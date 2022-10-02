@@ -211,7 +211,7 @@ public abstract class BaseShellService extends Service {
      * @param execCtx An execution context provides caller verification
      *                and signal handling functions.
      * @param args    Arguments from the shell. In case of termsh:
-     *                <code>termsh plugin &lt;pkg_name&gt; &lt;args&gt;</code>
+     *                {@code termsh plugin <pkg_name> <args>}
      * @param fds     Usually {stdin, stdout, stderr}.
      * @return An exit status to be returned to the shell.
      */

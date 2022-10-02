@@ -20,6 +20,8 @@ public abstract class BaseMain {
      * {@link BaseMain#main(ExecutionContext, byte[][], ParcelFileDescriptor[])}
      * to exit with a specified exit code and write a message (if not <b>null</b>)
      * to the <b>stderr</b>.
+     * <p>
+     * It is based on {@link Error} as it is supposed fall through usual {@code catch()} clauses.
      */
     public static final class ExitException extends Error {
         private final int exitCode;

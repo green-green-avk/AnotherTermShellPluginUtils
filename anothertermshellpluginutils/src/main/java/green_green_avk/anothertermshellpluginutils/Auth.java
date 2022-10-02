@@ -19,7 +19,8 @@ public final class Auth {
 
     /**
      * Returns an unique string associated with a signature.
-     * Actually returns just the result of {@link Signature#toCharsString()}.
+     * <p>
+     * Actually it returns just the result of {@link Signature#toCharsString()}.
      */
     public static String getFingerprint(@NonNull final Signature s) {
         return s.toCharsString();
@@ -33,7 +34,7 @@ public final class Auth {
      * @param context Some context.
      * @param uid     A package UID.
      * @param trusted A set to verify against.
-     * @return <code>true</code> if passed.
+     * @return {@code true} if passed.
      */
     public static boolean verify(@NonNull final Context context, final int uid,
                                  @NonNull final Set<String> trusted) {
@@ -51,7 +52,7 @@ public final class Auth {
      * @param context Some context.
      * @param pkgName A package name.
      * @param trusted A set to verify against.
-     * @return <code>true</code> if passed.
+     * @return {@code true} if passed.
      */
     @SuppressLint("PackageManagerGetSignatures") // So, check'em all...
     public static boolean verify(@NonNull final Context context, @NonNull final String pkgName,

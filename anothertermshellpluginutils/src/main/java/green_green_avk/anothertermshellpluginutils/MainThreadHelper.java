@@ -26,12 +26,7 @@ public final class MainThreadHelper {
             throws ExecutionException, InterruptedException {
         final Handler h = new Handler(Looper.getMainLooper());
         final FutureTask<T> t = new FutureTask<>(callable);
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                t.run();
-            }
-        });
+        h.post(t);
         return t.get();
     }
 }

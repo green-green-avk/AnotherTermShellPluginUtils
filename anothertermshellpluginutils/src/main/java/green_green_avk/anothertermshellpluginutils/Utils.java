@@ -102,12 +102,7 @@ public final class Utils {
                         return; // When a client disconnects and closes the signal pipe
                     } finally {
                         final Signal _signal = signal;
-                        h.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                onSignal.onSignal(_signal);
-                            }
-                        });
+                        h.post(() -> onSignal.onSignal(_signal));
                     }
                 }
             }
