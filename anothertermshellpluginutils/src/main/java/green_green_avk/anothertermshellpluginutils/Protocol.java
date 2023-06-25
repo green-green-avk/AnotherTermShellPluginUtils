@@ -44,7 +44,8 @@ public final class Protocol {
     static final int CODE_EXEC = IBinder.FIRST_CALL_TRANSACTION + 2;
 
     /**
-     * For third-party use
+     * For third-party use:
+     * [{@link #CODE_USER_BASE}, {@link IBinder#LAST_CALL_TRANSACTION}]
      */
-    public static final int CODE_CUSTOM_BEGIN = IBinder.FIRST_CALL_TRANSACTION + 2;
+    public static final int CODE_USER_BASE = IBinder.FIRST_CALL_TRANSACTION + 0x100;
 }
