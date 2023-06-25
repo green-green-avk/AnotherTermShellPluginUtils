@@ -51,8 +51,10 @@ public final class Plugin {
     public static boolean isStalled(@NonNull final String pkgName) {
         for (final WeakReference<Plugin> r : stalled) {
             final Plugin p = r.get();
-            if (p == null) continue;
-            if (p.getPackageName().equals(pkgName)) return true;
+            if (p == null)
+                continue;
+            if (p.getPackageName().equals(pkgName))
+                return true;
         }
         return false;
     }
@@ -63,7 +65,7 @@ public final class Plugin {
      *
      * @param ctx     Some context.
      * @param pkgName Package name.
-     * @return Plugin service component name or <b>null</b> if not a plugin.
+     * @return Plugin service component name or {@code null} if not a plugin.
      */
     @Nullable
     public static ComponentName getComponent(@NonNull final Context ctx,
@@ -98,7 +100,8 @@ public final class Plugin {
         final ParcelFileDescriptor[] sigFd = ParcelFileDescriptor.createPipe();
         final Intent intent = new Intent().setComponent(pluginComp);
         ctx = ctx.getApplicationContext();
-        final Plugin plugin = new Plugin(ctx, pluginComp, sigFd[0], sigFd[1]);
+        final Plugin plugin =
+                new Plugin(ctx, pluginComp, sigFd[0], sigFd[1]);
         final boolean isBound;
         try {
             isBound = ctx.bindService(intent, plugin.conn, Context.BIND_AUTO_CREATE);
@@ -230,12 +233,9 @@ public final class Plugin {
         }
     }
 
-    private final Handler hTimeout = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull final Message msg) {
-            stalled.add((WeakReference<Plugin>) msg.obj);
-            return true;
-        }
+    private final Handler hTimeout = new Handler(Looper.getMainLooper(), msg -> {
+        stalled.add((WeakReference<Plugin>) msg.obj);
+        return true;
     });
 
     @NonNull
@@ -246,7 +246,8 @@ public final class Plugin {
     }
 
     private void endTimedBlock(@Nullable final WeakReference<Plugin> obj) {
-        if (obj == null) return;
+        if (obj == null)
+            return;
         hTimeout.removeMessages(0, obj);
     }
 
@@ -298,7 +299,8 @@ public final class Plugin {
     @SuppressLint("ParcelClassLoader")
     @NonNull
     public Meta getMeta() throws IOException {
-        if (meta != null) return meta;
+        if (meta != null)
+            return meta;
         final IBinder binder;
         try {
             binder = getBinder();

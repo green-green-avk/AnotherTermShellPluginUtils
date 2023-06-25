@@ -13,8 +13,6 @@ public interface ExecutionContext {
      *
      * @param trusted Set to check against.
      * @return {@code true} if identity matches.
-     * @see BaseShellService#trustedClients
-     * @see BaseShellService#trustedClientsDebug
      */
     boolean verify(@NonNull Set<String> trusted);
 

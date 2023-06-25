@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Purely helper class just to have an exit() function at the moment.
+ * Purely helper class just to have an {@code exit()} function at the moment.
  */
 @SuppressWarnings("unused")
 public abstract class BaseMain {
@@ -18,7 +18,7 @@ public abstract class BaseMain {
     /**
      * To be thrown in
      * {@link BaseMain#main(ExecutionContext, byte[][], ParcelFileDescriptor[])}
-     * to exit with a specified exit code and write a message (if not <b>null</b>)
+     * to exit with a specified exit code and write a message (if not {@code null})
      * to the <b>stderr</b>.
      * <p>
      * It is based on {@link Error} as it is supposed fall through usual {@code catch()} clauses.
