@@ -22,7 +22,7 @@ public final class Protocol {
      */
     public static final int STRING_CONTENT_TYPE_HTML = 1;
     /**
-     * HTML as of <em>androidx.core.text.HtmlCompat</em>
+     * HTML as of <a href="https://developer.android.com/reference/androidx/core/text/HtmlCompat">{@code androidx.core.text.HtmlCompat}</a>
      */
     public static final int STRING_CONTENT_TYPE_HTML_COMPAT_ANDROID = 2;
     /**
